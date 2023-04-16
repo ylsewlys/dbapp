@@ -50,6 +50,16 @@ public class Assets{
         // List of assets
         public ArrayList<Integer> assetID_List = new ArrayList<>();
         public ArrayList<String> assetName_List = new ArrayList<>();
+        public ArrayList<String> asset_descriptionlist = new ArrayList();
+        public ArrayList<String> acquisition_datelist = new ArrayList();
+        public ArrayList<Integer> forrentlist = new ArrayList();
+        public ArrayList<Double> asset_valuelist = new ArrayList();
+        public ArrayList<String> type_assetlist = new ArrayList();
+        public ArrayList<String> statuslist = new ArrayList();
+        public ArrayList<Double> loc_lattitudelist = new ArrayList();
+        public ArrayList<Double> loc_longiturelist = new ArrayList();
+        public ArrayList<String> hoa_namelist = new ArrayList();
+        public ArrayList<Integer> enclosing_assetlist = new ArrayList();
 
         // List of disposable assets
         public ArrayList<Integer> assetID_DisposeList = new ArrayList<>();
@@ -396,6 +406,99 @@ public class Assets{
         
         
     }
+        
+        public int get_deletable_assets() {
+        try {
+            
+          
+            Connection conn;
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/HOADB?useTimezone=true&serverTimezone=UTC&user=root&password=12345678");
+            System.out.println("Connection Successful!");
+            
+            
+           
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM assets a LEFT JOIN asset_transactions t ON a.asset_id = t.asset_id LEFT JOIN asset_activity ac ON a.asset_id = ac.asset_id LEFT JOIN asset_transfer tr ON a.asset_id = tr.asset_id LEFT JOIN asset_rentals r ON a.asset_id = r.asset_id WHERE t.asset_id IS NULL AND ac.asset_id IS NULL AND tr.asset_id IS NULL AND r.asset_id IS NULL");
+            ResultSet rst = pstmt.executeQuery();
+            
+            assetID_List.clear();
+            assetName_List.clear();
+            asset_descriptionlist.clear();
+            acquisition_datelist.clear();
+            forrentlist.clear();
+            asset_valuelist.clear();
+            type_assetlist.clear();
+            statuslist.clear();
+            loc_lattitudelist.clear();
+            loc_longiturelist.clear();
+            hoa_namelist.clear();
+            enclosing_assetlist.clear();
+            
+            while(rst.next()) {          
+                asset_id = rst.getInt("asset_id");
+                asset_name = rst.getString("asset_name");
+                asset_description = rst.getString("asset_description");
+                acquisition_date = rst.getString("acquisition_date");
+                forrent = rst.getInt("forrent");
+                asset_value = rst.getDouble("asset_value");
+                type_asset = rst.getString("type_asset");
+                status = rst.getString("status");
+                loc_lattitude = rst.getDouble("loc_lattitude");
+                loc_longiture = rst.getDouble("loc_longiture");
+                hoa_name = rst.getString("hoa_name");
+                enclosing_asset = rst.getInt("enclosing_asset");
+                
+                assetID_List.add(asset_id);
+                assetName_List.add(asset_name);
+                acquisition_datelist.add(acquisition_date);
+                forrentlist.add(forrent);
+                asset_valuelist.add(asset_value);
+                type_assetlist.add(type_asset);
+                statuslist.add(status);
+                loc_lattitudelist.add(loc_lattitude);
+                loc_longiturelist.add(loc_longiture);
+                hoa_namelist.add(hoa_name);
+                enclosing_assetlist.add(enclosing_asset);
+            }
+   
+            
+            pstmt.close();
+            conn.close();
+            return 1;
+        }
+
+        catch(Exception e) {
+            System.out.println(e.getMessage());
+            return 0;
+        } 
+          
+        
+    }
+   
+   public int delete_asset(int asset_id_query) {
+       try {
+            
+          
+            Connection conn;
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/HOADB?useTimezone=true&serverTimezone=UTC&user=root&password=12345678");
+            System.out.println("Connection Successful!");
+            
+            
+    
+            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM assets WHERE asset_id = ?");
+            pstmt.setInt(1, asset_id_query);
+            
+            pstmt.executeUpdate();
+            
+            pstmt.close();
+            conn.close();
+            return 1;
+        }
+
+        catch(Exception e) {
+            System.out.println(e.getMessage());
+            return 0;
+        } 
+   }
     
     
     /*
