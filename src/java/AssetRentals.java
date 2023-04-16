@@ -353,16 +353,30 @@ public class AssetRentals {
 
     }
     
-    
-    
-    
+    public int DeleteRentalTransaction() {
+        try{
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/HOADB?useTimezone=true&serverTimezone=UTC&user=root&password=12345678&useSSl=false");  
+            System.out.println("Database Connection Successful...");               
 
+            PreparedStatement pstmt = con.prepareStatement("UPDATE asset_transactions SET isdeleted = 1 WHERE asset_transactions.asset_id = ? AND asset_transactions.transaction_date = ?");            
+            pstmt.setInt(1, asset_id);
+            pstmt.setString(2, rental_date);
+            pstmt.executeQuery();     
+            pstmt.close();
+            con.close();
+
+            System.out.println("Rental Record Deleted.");   
+            return 1;
+          
+        }catch(Exception e){
+            
+            System.out.println(e.getMessage());
+            System.out.println("ERROR");
+            return 0;
+        }          
+    }
     
-    
-    
-    
-    
-    
+   
     
     
 }
