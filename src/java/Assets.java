@@ -417,7 +417,7 @@ public class Assets{
             
             
            
-            PreparedStatement pstmt = conn.prepareStatement("SELECT a.asset_id , a.asset_name FROM assets a LEFT JOIN asset_transactions t ON a.asset_id = t.asset_id  LEFT JOIN asset_activity ac ON a.asset_id = ac.asset_id  LEFT JOIN asset_transfer tr ON a.asset_id = tr.asset_id  LEFT JOIN asset_rentals r ON a.asset_id = r.asset_id  LEFT JOIN donated_assets da ON a.asset_id = da.asset_id  WHERE t.asset_id IS NULL  AND ac.asset_id IS NULL  AND tr.asset_id IS NULL  AND r.asset_id IS NULL AND da.asset_id IS NULL");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM assets a LEFT JOIN asset_transactions t ON a.asset_id = t.asset_id  LEFT JOIN asset_activity ac ON a.asset_id = ac.asset_id  LEFT JOIN asset_transfer tr ON a.asset_id = tr.asset_id  LEFT JOIN asset_rentals r ON a.asset_id = r.asset_id  LEFT JOIN donated_assets da ON a.asset_id = da.asset_id  WHERE t.asset_id IS NULL  AND ac.asset_id IS NULL  AND tr.asset_id IS NULL  AND r.asset_id IS NULL AND da.asset_id IS NULL");
             ResultSet rst = pstmt.executeQuery();
             
             assetID_List.clear();
