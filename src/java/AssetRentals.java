@@ -8,6 +8,7 @@ package dbapp_package;
 import java.util.*;
 import java.sql.*;
 
+
 /**
  *
  * @author ccslearner
@@ -15,6 +16,7 @@ import java.sql.*;
 public class AssetRentals {
     
     public int asset_id;
+    public String asset_name;
     public String rental_date;
     public String reservation_date;
     public Integer resident_id;
@@ -42,7 +44,22 @@ public class AssetRentals {
     public String original_accept_electiondate;
     public String original_return_date;    
     
+    // FOR RETURN
     
+    public String str_asset_id;
+    public String str_asset_name;    
+    public String str_rental_date;
+    public String str_reservation_date;
+    public String str_resident_id;
+    public String str_rental_amount;
+    public String str_discount;
+    public String str_status;
+    public String str_inspection_details;
+    public String str_assessed_value;
+    public String str_accept_hoid;
+    public String str_accept_position;
+    public String str_accept_electiondate;
+    public String str_return_date;        
     
     
     
@@ -63,6 +80,227 @@ public class AssetRentals {
     public ArrayList<String> officerPosition_List = new ArrayList<>();    
     public ArrayList<String> officerElectionDate_List = new ArrayList<>();     
     
+    public ArrayList<Integer> assetID_RentalList = new ArrayList<>();  
+    public ArrayList<String> assetName_RentalList = new ArrayList<>();      
+    public ArrayList<String> rentalDate_RentalList = new ArrayList<>();    
+    
+    public ArrayList<Integer> assetID_DeleteList = new ArrayList<>();        
+    public ArrayList<String> rentalDate_DeleteList = new ArrayList<>();        
+    
+    public void storePossibleRentalInfo(){
+        try{
+                Connection con =DriverManager.getConnection("jdbc:mysql://localhost:3306/HOADB?useTimezone=true&serverTimezone=UTC&user=root&password=12345678");  
+                System.out.println("Database Connection Successful...");               
+
+                
+                
+                PreparedStatement pstmt = con.prepareStatement("SELECT ar.asset_id, a.asset_name, ar.rental_date FROM asset_rentals ar JOIN assets a ON ar.asset_id = a.asset_id WHERE ar.status LIKE '%O%'");
+                ResultSet resultSet = pstmt.executeQuery();     
+                
+                
+
+                // Initialize ArrayLists
+                assetID_RentalList.clear();
+                assetName_RentalList.clear();
+                rentalDate_RentalList.clear();
+
+
+
+                while(resultSet.next()){                
+                    assetID_RentalList.add(resultSet.getInt("ar.asset_id"));   
+                    assetName_RentalList.add(resultSet.getString("a.asset_name"));
+                    rentalDate_RentalList.add(resultSet.getString("ar.rental_date"));
+                }     
+
+                pstmt.close();
+                con.close();
+
+                System.out.println("storePossibleRentalInfo successful");                   
+
+
+        }catch(Exception e){
+
+            System.out.println(e.getMessage());
+        }              
+        
+        
+    }
+    
+    public void getPossibleRentalInfoForDelete(){
+        try{
+                Connection con =DriverManager.getConnection("jdbc:mysql://localhost:3306/HOADB?useTimezone=true&serverTimezone=UTC&user=root&password=12345678");  
+                System.out.println("Database Connection Successful...");               
+
+                
+                
+                PreparedStatement pstmt = con.prepareStatement("SELECT ar.asset_id, ar.rental_date FROM asset_transactions ast JOIN asset_rentals ar ON ast.asset_id = ar.asset_id AND ast.transaction_Date = ar.rental_date WHERE ast.isdeleted = 0 ORDER BY ar.asset_id;");
+                ResultSet resultSet = pstmt.executeQuery();     
+                
+                
+
+                // Initialize ArrayLists
+                assetID_DeleteList.clear();
+                rentalDate_DeleteList.clear();
+
+
+
+                while(resultSet.next()){                
+                    assetID_DeleteList.add(resultSet.getInt("ar.asset_id"));   
+                    rentalDate_DeleteList.add(resultSet.getString("ar.rental_date"));
+                }     
+
+                pstmt.close();
+                con.close();
+
+                System.out.println("getPossibleRentalInfoForDelete successful");                   
+
+
+        }catch(Exception e){
+
+            System.out.println(e.getMessage());
+        }                  
+         
+    }
+    
+    public int deleteRentalInfo(){
+    
+        try{
+                Connection con =DriverManager.getConnection("jdbc:mysql://localhost:3306/HOADB?useTimezone=true&serverTimezone=UTC&user=root&password=12345678");  
+                System.out.println("Database Connection Successful...");               
+
+                
+                
+                PreparedStatement pstmt = con.prepareStatement("UPDATE asset_transactions ast SET ast.isdeleted = 1 WHERE ast.asset_id=? AND ast.transaction_date=?");
+                
+                
+                pstmt.setInt(1, asset_id);   
+                pstmt.setString(2, rental_date);
+                
+                pstmt.executeUpdate();
+
+
+                pstmt.close();
+                con.close();
+
+
+
+
+                System.out.println("Program successful");
+
+                return 1;        
+        
+       
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return 0;
+        }
+  
+    
+    }
+    
+    public int returnAssetRentalRecord(){
+        
+    try {    
+                Connection con =DriverManager.getConnection("jdbc:mysql://localhost:3306/HOADB?useTimezone=true&serverTimezone=UTC&user=root&password=12345678");  
+                System.out.println("Database Connection Successful...");         
+                
+                PreparedStatement pstmt = con.prepareStatement("UPDATE asset_rentals ar SET ar.status = 'N' WHERE ar.asset_id=? AND ar.rental_date=? ");
+                pstmt.setInt(1, asset_id);
+                pstmt.setString(2, rental_date);
+                
+                pstmt.executeUpdate();
+                
+                pstmt.close();
+                con.close();
+        
+                          
+                str_asset_id = "Asset ID: " + asset_id;
+
+                str_asset_name = "Asset Name: " + asset_name;
+
+                String rentalDate = "Rental Date: " + rental_date;
+                str_rental_date = rentalDate;
+
+                String reservationDate = "Reservation Date: " + reservation_date;
+                str_reservation_date = reservationDate;
+
+                String residentID = "Resident ID: " + resident_id;
+                str_resident_id =residentID;
+
+                String rentalAmount;
+                if (rental_amount == null || rental_amount == 0){
+                    rentalAmount = "Rental Amount: 0";
+                } else{
+                    rentalAmount = "Rental Amount: " + rental_amount;
+                }
+                str_rental_amount = rentalAmount;
+
+
+
+                String strDiscount;
+                if (discount == null || discount == 0){
+                    strDiscount = "Discount: 0";
+                } else{
+                    strDiscount = "Discount: " + discount;
+                }
+                str_discount = strDiscount;     
+
+                String strStatus = "Status: " + status;      
+                str_status = strStatus;
+
+
+                String inspectionDetails = "Inspection Details: " + inspection_details;
+                if (inspection_details.compareTo("") == 0){
+                    str_inspection_details = "Inspection Details: N/A";
+                }else{
+                    str_inspection_details = inspectionDetails;           
+                }
+
+
+
+                String assessedValue;
+                if (assessed_value == null || assessed_value == 0){
+                   assessedValue = "Assessed Value: 0";
+                } else{
+                   assessedValue = "Assessed Value: " + assessed_value;
+                }
+                str_assessed_value = assessedValue;  
+
+                String acceptHOID, acceptPosition, acceptElectionDate;
+                 if (accept_hoid == null || accept_hoid == 0){
+                   acceptHOID = "Accepting Officer: N/A";
+                   acceptPosition = "Officer Position: N/A";
+                   acceptElectionDate = "Officer Election Date: N/A";     
+                } else{
+                   acceptHOID = "Accepting Officer ID: " + accept_hoid;
+                   acceptPosition = "Officer Position: " + accept_position;
+                   acceptElectionDate = "Officer Election Date: " + accept_electiondate;        
+                }
+                str_accept_hoid = acceptHOID;  
+                str_accept_position = acceptPosition;
+                str_accept_electiondate = acceptElectionDate;
+
+
+                String returnDate;
+                if (return_date == null || return_date.compareTo("") == 0){
+                    returnDate = "Return Date: N/A";
+                } else{
+                    returnDate = "Return Date: " + return_date;
+                }
+                str_return_date = returnDate;
+
+                return 1;
+    }catch(Exception e){
+        System.out.println(e.getMessage());
+        return 0;
+    }
+    
+       
+}
+    
+    
+    
+    
     public void getAssetRecords(){   
         try{
                 Connection con =DriverManager.getConnection("jdbc:mysql://localhost:3306/HOADB?useTimezone=true&serverTimezone=UTC&user=root&password=12345678");  
@@ -70,7 +308,7 @@ public class AssetRentals {
 
                 
                 
-                PreparedStatement pstmt = con.prepareStatement("SELECT ar.asset_id, a.asset_name, ar.rental_date, ar.resident_id FROM asset_rentals ar JOIN assets a ON ar.asset_id = a.asset_id");
+                PreparedStatement pstmt = con.prepareStatement("SELECT ar.asset_id, a.asset_name, ar.rental_date, ar.resident_id FROM asset_rentals ar JOIN assets a ON ar.asset_id = a.asset_id JOIN asset_transactions ast ON ar.asset_id = ast.asset_id AND ar.rental_date = ast.transaction_date WHERE ast.isdeleted = 0;");
                 ResultSet resultSet = pstmt.executeQuery();     
                 
                 
@@ -92,7 +330,7 @@ public class AssetRentals {
                 pstmt.close();
                 con.close();
 
-                System.out.println("getAssetIdRecords successful");                   
+                System.out.println("getAssetRecords successful");                   
 
 
         }catch(Exception e){
@@ -353,30 +591,69 @@ public class AssetRentals {
 
     }
     
-    public int DeleteRentalTransaction() {
-        try{
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/HOADB?useTimezone=true&serverTimezone=UTC&user=root&password=12345678&useSSl=false");  
-            System.out.println("Database Connection Successful...");               
+    
+    
+    
+        // UNFINISHED
+        public int registerRental(){
 
-            PreparedStatement pstmt = con.prepareStatement("UPDATE asset_transactions SET isdeleted = 1 WHERE asset_transactions.asset_id = ? AND asset_transactions.transaction_date = ?");            
+           try{
+               // Connect to database;
+            Connection con =DriverManager.getConnection("jdbc:mysql://localhost:3306/HOADB?useTimezone=true&serverTimezone=UTC&user=root&password=12345678");  
+            System.out.println("Connection Successful...");
+
+            PreparedStatement pstmt = con.prepareStatement("SELECT MAX(asset_id) + 1 AS newID FROM assets");
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while(resultSet.next()){
+                asset_id = resultSet.getInt("newID");
+            }
+
+            // Save the new rental
+
+            pstmt = con.prepareStatement("INSERT INTO assets (asset_id, rental_date, reservation_date, resident_id, rental_amount, discount, status, inspection_details, assessed_value, accept_hoid, return_date) "
+                    + "VALUE(?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?)");
+
+
             pstmt.setInt(1, asset_id);
-            pstmt.setString(2, rental_date);
-            pstmt.executeQuery();     
+            pstmt.setString(2, rental_date);     
+            pstmt.setString(3, reservation_date);
+            pstmt.setInt(4, resident_id);
+            pstmt.setDouble(5, rental_amount);
+            pstmt.setDouble(6, discount);
+            pstmt.setString(7, status); 
+            pstmt.setString(8, inspection_details);
+            pstmt.setDouble(9, assessed_value);
+            pstmt.setInt(10, accept_hoid);
+            pstmt.setString(11, return_date);
+
+
+
+
+            pstmt.executeUpdate();
+
             pstmt.close();
             con.close();
 
-            System.out.println("Rental Record Deleted.");   
+            System.out.println("Program successful");
+
             return 1;
-          
-        }catch(Exception e){
-            
-            System.out.println(e.getMessage());
-            System.out.println("ERROR");
-            return 0;
-        }          
-    }
+
+
+           } catch (Exception e){
+
+               System.out.println(e.getMessage());
+               System.out.println("ERROR");
+               return 0;
+           }
+
+
+       }   
     
-   
+    
+    
+    
+    
     
     
 }
