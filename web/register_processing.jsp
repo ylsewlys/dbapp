@@ -19,7 +19,7 @@
                // Receive the values from register.jsp
                String v_asset_name          = request.getParameter("asset_name");
                String v_asset_description   = request.getParameter("asset_description");
-               String v_acquisition_date    = request.getParameter("acquisition_date");
+               //String v_acquisition_date    = request.getParameter("acquisition_date");
                int v_forrent                = Integer.parseInt(request.getParameter("forrent"));
                Double v_asset_value         = Double.parseDouble(request.getParameter("asset_value"));
                String v_type_asset          = request.getParameter("type_asset");
@@ -32,7 +32,7 @@
                
                A.asset_name = v_asset_name; 
                A.asset_description = v_asset_description;
-               A.acquisition_date = v_acquisition_date;
+               //A.acquisition_date = v_acquisition_date;
                A.forrent = v_forrent;
                A.asset_value = v_asset_value;
                A.type_asset = v_type_asset;
