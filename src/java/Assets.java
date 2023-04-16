@@ -6,7 +6,7 @@ package dbapp_package;
 
 /**
  *
- * @author Wesly
+ * 
  */
 import java.util.*;
 import java.sql.*;
