@@ -157,28 +157,32 @@ public class Assets{
             pstmt = con.prepareStatement("INSERT INTO assets (asset_id, asset_name, asset_description, acquisition_date, forrent, asset_value, type_asset, status, loc_lattitude, loc_longiture, hoa_name, enclosing_asset) "
                     + "VALUE(?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?)");
             
-                       
+
             pstmt.setInt(1, asset_id);
             pstmt.setString(2, asset_name);     
             pstmt.setString(3, asset_description);
+
             pstmt.setInt(4, forrent);
             pstmt.setDouble(5, asset_value);
             pstmt.setString(6, type_asset);
+
             pstmt.setString(7, status); 
             pstmt.setDouble(8, loc_lattitude);
             pstmt.setDouble(9, loc_longiture);
             pstmt.setString(10, hoa_name);
-            
-            if (!(enclosing_asset == -1)){
-                pstmt.setInt(11, enclosing_asset);                
+                                                    System.out.println("CHECKKK"); 
+            if (!(enclosing_asset == null)){
+                                                       
+                pstmt.setInt(11, enclosing_asset);  
+   
             } else{
                 pstmt.setNull(11, Types.INTEGER);
             }
 
-            
-            
+
+     
             pstmt.executeUpdate();
-            
+
             pstmt.close();
             con.close();
             
@@ -501,33 +505,33 @@ public class Assets{
    }
     
     
-    /*
     
+    /*
     public static void main(String args[]){
         
         Assets A = new Assets();
         
-        A.asset_id = 5001;
-        A.asset_name = "KASHDKAS";
-        A.asset_description = "desc";
-        A.acquisition_date = "2025-05-09";
+        A.asset_id = 5026;
+        A.asset_name = "Cooper's Very Awesome Toy :0";
+        A.asset_description = "aaaa";
+        A.acquisition_date = "2023-04-17";
         A.forrent = 1;
-        A.asset_value = 70.0;
-        A.type_asset = "P";
-        A.status = "W";
-        A.loc_lattitude = 55.45;
-        A.loc_longiture = 23.56;
-        A.hoa_name = "SMH";
+        A.asset_value = 1.0;
+        A.type_asset = "O";
+        A.status = "X";
+        A.loc_lattitude = 123.0;
+        A.loc_longiture = 54.2313;
+        A.hoa_name = "SJH";
         A.enclosing_asset = null;
         
-        A.updateAssetInfo();
+        A.registerAsset();
 
         
         
     }
-    
-    
     */
+    
+    
         
 }
 
