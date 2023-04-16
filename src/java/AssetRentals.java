@@ -234,7 +234,7 @@ public class AssetRentals {
             System.out.println("Connection Successful...");
             
             
-            getOriginalRentalInfo();
+
 
 
             // Update asset's rental information
