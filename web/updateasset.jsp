@@ -83,7 +83,10 @@
             <input type="submit" value="Submit"><br>               
         </form>        
         
-        
+        <form action ="index.html">
+            <input type="submit" value="Return to Main Menu"><br>              
+    
+        </form>        
         
         
     </body>
