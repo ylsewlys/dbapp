@@ -21,13 +21,13 @@
                String v_asset_description   = request.getParameter("asset_description");
                String v_acquisition_date    = request.getParameter("acquisition_date");
                int v_forrent                = Integer.parseInt(request.getParameter("forrent"));
-               double v_asset_value         = Double.parseDouble(request.getParameter("asset_value"));
+               Double v_asset_value         = Double.parseDouble(request.getParameter("asset_value"));
                String v_type_asset          = request.getParameter("type_asset");
                String v_status              = request.getParameter("status");
-               double v_loc_lattitude       = Double.parseDouble(request.getParameter("loc_lattitude"));;               
-               double v_loc_longiture       = Double.parseDouble(request.getParameter("loc_longiture"));;
+               Double v_loc_lattitude       = Double.parseDouble(request.getParameter("loc_lattitude"));;               
+               Double v_loc_longiture       = Double.parseDouble(request.getParameter("loc_longiture"));;
                String v_hoa_name            = request.getParameter("hoa_name");;
-               int v_enclosing_asset        = Integer.parseInt(request.getParameter("enclosing_asset"));;               
+               Integer v_enclosing_asset        = Integer.parseInt(request.getParameter("enclosing_asset"));;               
                
                
                A.asset_name = v_asset_name; 

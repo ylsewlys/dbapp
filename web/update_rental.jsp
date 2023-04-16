@@ -26,12 +26,12 @@ and open the template in the editor.
                     AR.getAssetRecords();
                     for (int i = 0; i < AR.assetID_List.size(); i++){                                           
                 %>               
-                <option value ="<%=AR.assetID_List.get(i)%>, <%=AR.rentalDate_List.get(i)%>"><%="Asset ID:   " + AR.assetID_List.get(i) + " Asset Name:   " + AR.assetName_List.get(i) + " Rental Date:   " + AR.rentalDate_List.get(i)%></option>
+                <option value ="<%=AR.assetID_List.get(i)%>,<%=AR.rentalDate_List.get(i)%>"><%="Asset ID:   " + AR.assetID_List.get(i) + " Asset Name:   " + AR.assetName_List.get(i) + " Rental Date:   " + AR.rentalDate_List.get(i)%></option>
                 <%
                     }
                 %>          
             </select><br>
-            Update Reservation Date:<input type="text" id="reservation_date" name="reservation_date"><br>               
+            Update Reservation Date:<input type="date" id="reservation_date" name="reservation_date"><br>               
             Update Resident ID:<select id="resident_id" name="resident_id">
                 <option value="-1">N/A</option>   
                 <%
@@ -66,7 +66,7 @@ and open the template in the editor.
                     }
                 %>                
             </select><br>
-            Update Return Date:<input type="text" id="return_date" name="return_date"><br>  
+            Update Return Date:<input type="date" id="return_date" name="return_date"><br>  
 
 
             

@@ -25,9 +25,14 @@
                int v_asset_id = Integer.parseInt(strValues[0]);
                String v_rental_date = strValues[1];
                
+               AR.asset_id = v_asset_id;               
+               AR.rental_date = v_rental_date;
+               
+               AR.getOriginalRentalInfo(); // Initialize asset's original rental info
+               
                String v_reservation_date;
                if (!(request.getParameter("reservation_date").compareTo("") == 0)){
-                    v_reservation_date = request.getParameter("reservation_date");                   
+                    v_reservation_date = java.sql.Date.valueOf(request.getParameter("reservation_date")).toString();                   
                }else{
                    v_reservation_date = AR.original_reservation_date;
                }
@@ -92,7 +97,7 @@
 
                String v_return_date;
                if(!(request.getParameter("return_date").compareTo("") == 0)){
-                   v_return_date = request.getParameter("return_date");                   
+                   v_return_date = java.sql.Date.valueOf(request.getParameter("return_date")).toString();                   
                }else{
                    v_return_date = AR.original_return_date;
                }
@@ -105,9 +110,7 @@
                
                
                
-               
-               AR.asset_id = v_asset_id;               
-               AR.rental_date = v_rental_date;
+
                AR.reservation_date = v_reservation_date;
                AR.resident_id = v_resident_id; 
                AR.rental_amount = v_rental_amount;
